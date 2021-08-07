@@ -13,8 +13,8 @@ then
     TNN_ROOT_PATH=$(cd `dirname $0`; pwd)/..
 fi
 
-mkdir build_aarch64_linux
-cd build_aarch64_linux
+mkdir build_aarch64_linux_sim
+cd build_aarch64_linux_sim
 
 cmake ${TNN_ROOT_PATH} \
     -DCMAKE_SYSTEM_NAME=Linux  \
@@ -29,10 +29,13 @@ cmake ${TNN_ROOT_PATH} \
     -DTNN_UNIT_TEST_ENABLE=ON \
     -DTNN_COVERAGE=ON \
     -DCMAKE_SYSTEM_PROCESSOR=$TARGET_ARCH \
-    -DTNN_BUILD_SHARED:BOOL=$SHARED_LIB
+    -DTNN_BUILD_SHARED:BOOL=$SHARED_LIB \
+    -DTNN_MODEL_CHECK_ENABLE:BOOL="ON" \
+    -DDEBUG=ON
 
 
-make -j4
+
+make -j12
 
 # check compile error, or ci will not stop
 if [ 0 -ne $? ]
